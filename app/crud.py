@@ -12,18 +12,19 @@ def get_link(db: Session, link: str, target_date: Optional[str] = None):
     """Retrieve link information by link ID
     """
     link = db.query(models.Link).filter(models.Link.link == link).first()
-    if target_date:
-        clicks = []
-        for click in link.clicks:
-            try:
-                if click.created.date() == \
-                    datetime.fromisoformat(target_date).date():
-                    clicks.append(click)
-            except ValueError:
-                return link
-        link.clicks.clear()
-        link.clicks = clicks
-    return link
+    if link:
+        if target_date:
+            clicks = []
+            for click in link.clicks:
+                try:
+                    if click.created.date() == \
+                        datetime.fromisoformat(target_date).date():
+                        clicks.append(click)
+                except ValueError:
+                    return link
+            link.clicks.clear()
+            link.clicks = clicks
+        return link
 
 
 def create_link(db: Session, link: schemas.Link):

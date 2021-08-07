@@ -8,20 +8,21 @@ from random import sample
 from string import ascii_letters, digits
 
 
-def get_link(db: Session, link: str, target_date: Optional[str] = None):
+def get_link(db: Session, link: str, start_date: Optional[str] = None, end_date: Optional[str] = None):
     """Retrieve link information by link ID
     """
     link = db.query(models.Link).filter(models.Link.link == link).first()
     if link:
-        if target_date:
+        if start_date and end_date:
+            try:
+                start_date = datetime.fromisoformat(start_date).date()
+                end_date = datetime.fromisoformat(end_date).date()
+            except ValueError:
+                return link
             clicks = []
             for click in link.clicks:
-                try:
-                    if click.created.date() == \
-                        datetime.fromisoformat(target_date).date():
+                    if start_date <= click.created.date() <= end_date:
                         clicks.append(click)
-                except ValueError:
-                    return link
             link.clicks.clear()
             link.clicks = clicks
         return link

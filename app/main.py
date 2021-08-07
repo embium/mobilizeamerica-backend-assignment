@@ -56,10 +56,10 @@ def get_link(link: str, db: Session = Depends(get_db)):
 
 
 @app.get("/{link}/info", response_model=schemas.Link)
-def get_link_info(link: str, target_date: Optional[str] = None, db: Session = Depends(get_db)):
+def get_link_info(link: str, start_date: Optional[str] = None, end_date: Optional[str] = None, db: Session = Depends(get_db)):
     """Retrieve link information
     """
-    db_link = crud.get_link(db, link=link, target_date=target_date)
+    db_link = crud.get_link(db, link=link, start_date=start_date, end_date=end_date)
     if db_link is None:
         raise HTTPException(status_code=404, detail="link not found")
     return db_link

@@ -16,12 +16,14 @@ class Link(Base):
     link = Column(String(20), unique=True, index=True, nullable=False)
     target = Column(Text, index=True, nullable=False)
     created = Column(DateTime, default=datetime.now)
+    amount = Column(Integer, default=0)
+    clicks = relationship('Click')
 
-    clicks = relationship('Click', lazy=True)
 
 class Click(Base):
     __tablename__ = "clicks"
 
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     created = Column(DateTime, default=datetime.now)
+    ip_address = Column(String(39), index=True, nullable=False)
     link_id = Column(Integer, ForeignKey('links.id'))

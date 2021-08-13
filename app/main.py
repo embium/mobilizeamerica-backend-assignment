@@ -1,7 +1,7 @@
 """FastAPI application entrypoint
 """
 from typing import Optional
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Request
 from sqlalchemy.orm import Session
 from . import crud, models, schemas
 from .database import SessionLocal, engine
@@ -45,13 +45,13 @@ def create_link(link: schemas.Link, db: Session = Depends(get_db)):
 
 
 @app.get("/{link}", response_model=schemas.Link)
-def get_link(link: str, db: Session = Depends(get_db)):
+def get_link(link: str, request: Request, db: Session = Depends(get_db)):
     """Retrieve the target and redirect
     """
     db_link = crud.get_link(db, link=link)
     if db_link is None:
         raise HTTPException(status_code=404, detail="link not found")
-    crud.count_clicks(db=db, link=db_link)
+    crud.count_clicks(db=db, link=db_link, request=request)
     return RedirectResponse(url=db_link.target, status_code=302)
 
 

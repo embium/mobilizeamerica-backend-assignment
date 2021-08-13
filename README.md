@@ -38,6 +38,27 @@ $ curl -s -X GET http://127.0.0.1:8000/4QiXbz8/info
   ]
 }
 ```
+List only `clicks` between a giving range
+```bash
+$ curl -s -X GET http://127.0.0.1:8000/4QiXbz8/info?start_date=2021-08-07&end_date=2021-08-07
+{
+  "target": "http://google.com",
+  "created": "2021-08-07T13:04:26.437782",
+  "link": "4QiXbz8",
+  "clicks": [
+    {
+      "created": "2021-08-07T16:42:05.494924",
+      "id": 1,
+      "link_id": 1
+    },
+    {
+      "created": "2021-08-07T16:43:08.836689",
+      "id": 2,
+      "link_id": 1
+    }
+  ]
+}
+```
 
 Remove permanently an URL shortened from the database.
 ```bash
